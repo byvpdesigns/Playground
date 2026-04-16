@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vashtie | Playground</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+    <style>
+        .font-instrument-serif { font-family: 'Instrument Serif', serif; font-style: italic; }
+        .font-instrument-sans { font-family: 'Instrument Sans', sans-serif; }
+
+        /* --- GLOBAL RESET --- */
+        body { 
+            background-color: #a200ff !important; 
+            margin: 0; 
+            padding: 0;
+            color: #1a1a1a;
+            overflow-x: hidden;
+            display: block; 
+        }
+
+        /* --- HERO SECTION --- */
+        .hero-section {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+            padding-top: 7vh;
+            margin-bottom: -5vh;
+            overflow: visible;
+            background-color: #a200ff !important;
+        }
+
+        .hero-title {
+            text-align: center;
+            font-size: 15vw;
+            color: #ffffff;
+            line-height: 0.85;
+            margin: 0;
+            text-transform: uppercase;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* --- FLOATING HEAD --- */
+        .floating-head-container {
+            position: relative;
+            width: 100vw;
+            max-width: 1000px;
+            aspect-ratio: 1 / 1;
+            margin-top: -23vw;
+            margin-bottom: -30vh;
+            z-index: 20;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: visible;
+        }
+
+        .floating-head-container img.main-head {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .subheading-container {
+            width: 100%;
+            text-align: center;
+            /* This pulls the text up toward the mascot's chin */
+            margin-top: 10vh; 
+            /* This adds a little space before the cards start */
+            margin-bottom: 40px; 
+            z-index: 10;
+            position: relative;
+        }
+
+.subheading-container h2 {
+    font-size: 2.5rem;
+    color: #ffffff;
+    opacity: 0.9;
+    /* This makes it feel more like a caption */
+    letter-spacing: -0.02em; 
+}
+
+/* Mobile Tweak */
+@media (max-width: 768px) {
+    .subheading-container {
+        margin-top: -2vh;
+        padding: 0 20px;
+    }
+    .subheading-container h2 {
+        font-size: 1.5rem;
+    }
+}
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+
+        /* --- SHARDS --- */
+        .shard { position: absolute; z-index: 25; pointer-events: none; display: flex; justify-content: center; align-items: center; }
+        .shard img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 15px 10px rgba(0,0,0,0.05)); }
+
+        .shard-1 { width: 6vw; top: 30%; left: 15%; animation: float 7s ease-in-out infinite reverse; }
+        .shard-2 { width: 12vw; top: 25%; right: 10%; animation: float 5s ease-in-out infinite; }
+        .shard-3 { width: 10vw; bottom: 25%; left: 10%; animation: float 8s ease-in-out infinite; }
+        .shard-4 { width: 4vw; bottom: 30%; right: 15%; animation: float 9s ease-in-out infinite reverse; }
+
+        /* --- TICKER LOGIC --- */
+        .ticker-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            height: 40vh;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+        }
+
+        .ticker-wrapper {
+    display: flex;
+    gap: 0; /* Remove gap to prevent math errors */
+    width: max-content;
+    animation: scroll-ticker 25s linear infinite;
+    animation-play-state: paused;
+}
+
+        .active .ticker-wrapper { animation-play-state: running; }
+
+        .ticker-wrapper img {
+    height: 30vh;
+    width: auto;
+    display: block;
+    object-fit: contain;
+    flex-shrink: 0;
+    /* Move the spacing here instead of 'gap' */
+    padding-right: 40px; 
+}
+
+        @keyframes scroll-ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* --- PLAYGROUND SECTION --- */
+        .playground-section {
+            width: 100%;
+            overflow-x: auto; /* Allows horizontal scrolling */
+            overflow-y: hidden; /* Prevents vertical shifting */
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            padding: 80px 0;
+            background-color: #a200ff !important;
+        }
+
+        #playground-container { 
+            display: flex; 
+            height: 75vh; 
+            gap: 30px; 
+            align-items: stretch;
+            width: max-content;
+            padding: 0 25vw 0 5vw; 
+        }
+
+        /* --- CARD STYLES --- */
+        .project-card {
+            transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+            width: 120px;
+            flex-shrink: 0;
+            border: 1px solid #f3f4f6; 
+            position: relative; 
+            overflow: hidden; 
+            border-radius: 8px; 
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .1);
+        }
+
+        .card-image {
+            position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+            filter: blur(5px) brightness(.7) opacity(.5); transition: filter 0.6s ease;
+            pointer-events: none;
+        }
+
+        .project-card:hover:not(.active) { width: 180px; cursor: pointer; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); }
+        .project-card:hover:not(.active) .card-image { filter: blur(0px) brightness(1) opacity(1); }
+        
+        .project-card.active { width: 80vw; cursor: default; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12); } 
+        .active .card-image { display: none; }
+
+        .project-label { 
+            position: absolute; bottom: 30px; left: 30px; 
+            font-size: 5rem; transition: opacity 0.3s ease; 
+            z-index: 10; pointer-events: none;
+            color: #ffffff;
+        }
+        .active .project-label { opacity: 0; }
+
+        /* SEAMLESS CLOSING TRANSITION */
+        .mini-content-window {
+            opacity: 0; pointer-events: none; 
+            transition: opacity 0.2s ease 0s; /* Disappear instantly on close */
+            padding: 60px; display: flex; flex-direction: column; height: 100%; overflow-y: auto;
+            width: 80vw; position: relative;
+        }
+        .active .mini-content-window { 
+            opacity: 1; pointer-events: auto; 
+            transition: opacity 0.5s ease 0.4s; /* Fade in after card expands */
+        }
+
+        .close-project {
+            position: absolute; top: 40px; right: 40px;
+            cursor: pointer; font-size: 0.75rem; font-weight: bold;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            color: #9ca3af; z-index: 50;
+        }
+
+        /* --- MOBILE --- */
+        @media (max-width: 768px) {
+            .hero-section { min-height: 60vh !important; padding-top: 3vh; }
+            .hero-title { font-size: 15vw; }
+            .floating-head-container { width: 90vw; margin-top: -20vw; margin-bottom: -30vh; }
+            .shard-1 { width: 12vw; } .shard-2 { width: 18vw; } .shard-3 { width: 14vw; } .shard-4 { width: 10vw; }
+            .playground-section { padding-top: 0 !important; }
+            .project-card.active { width: 95vw; }
+            .mini-content-window { width: 95vw; padding: 30px; }
+
+        }
+
+        /* --- VIDEO MODAL FIX --- */
+#video-modal {
+    /* 1. This stops it from taking up space in your layout */
+    position: fixed; 
+    inset: 0; 
+    
+    /* 2. High z-index keeps it above the mascot and stars */
+    z-index: 1000; 
+    
+    /* 3. This is the magic line that kills the ghost box */
+    display: none; 
+    
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    align-items: center; 
+    justify-content: center;
+}
+
+/* This is a helper for your JavaScript later */
+#video-modal.active {
+    display: flex;
+}
+
+/* --- RESPONSIVE CORNER LABELS --- */
+.hero-label {
+    position: absolute;
+    z-index: 30;
+    color: #ffffff;
+    line-height: 1.2;
+    pointer-events: none;
+    /* This makes the font shrink smoothly as the screen gets smaller */
+    font-size: clamp(.7rem, 2.2vw, 3rem);
+}
+
+/* TOP LEFT: "a true" */
+.label-tl {
+    top: 2vh;
+    left: 3vw;
+}
+
+/* TOP RIGHT: "*mind the glitches*" */
+.label-tr {
+    top: 33vh;
+    right: 3vw;
+    text-align: right;
+    color: #ffffff;
+    text-transform: lowercase;
+}
+
+/* BOTTOM LEFT: "Where my creative..." */
+.label-bl {
+    bottom: 5vh;
+    left: 4vw;
+    /* Larger clamp for the big subtitle */
+    font-size: clamp(1rem, 2.2vw, 3rem);
+}
+
+/* BOTTOM RIGHT: "made using..." */
+.label-br {
+    bottom: 5vh;
+    right: 4vw;
+    text-align: right;
+    color: #ffffff;
+}
+
+/* MOBILE FIX: On small phones, we nudge them in slightly */
+@media (max-width: 768px) {
+    .hero-label { padding: 0 10px; }
+    .label-bl { bottom: 2vh; }
+}
+
+/* --- LINK BUTTON CONTAINER --- */
+.hero-link-container {
+    position: absolute;
+    /* This anchors it to the same bottom-right "safety zone" as the text */
+    bottom: calc(6vh + 50px); /* 30px is a guess, adjust this to create perfect spacing */
+    right: 14vw;
+    z-index: 30;
+    pointer-events: auto; /* Makes sure the button is actually clickable! */
+    width: clamp(1rem, 2.2vw, 3rem); /* Matches the text size */
+}
+
+/* --- BUTTON STYLING --- */
+.hero-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background: transparent;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    border-radius: 4px; /* A very subtle curve */
+    font-size: 0.75rem; /* Matches your other 'sans' labels */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    white-space: nowrap; /* Prevents text from breaking onto two lines */
+}
+
+/* --- HOVER EFFECT --- */
+.hero-button:hover {
+    background: #ffffff;
+    color: #1a1a1a;
+    box-shadow: 0 5px 25px rgba(255, 255, 255, 0.4); /* A subtle "glitch glow" */
+    transform: translateY(-2px); /* Slight lift */
+}
+
+/* --- MOBILE TWEAKS --- */
+@media (max-width: 768px) {
+    .hero-link-container {
+        /* We stack it on phones for better balance */
+        bottom: 8vh;
+        right: 50%;
+        transform: translateX(50%);
+        text-align: center;
+    }
+    .hero-button {
+        padding: 8px 18px;
+        font-size: 0.65rem;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+    <div id="video-modal">
+        <div class="relative w-[80vw]">
+            <span class="absolute -top-10 right-0 cursor-pointer font-instrument-sans font-bold uppercase tracking-widest text-xs" onclick="closeVideo()">Close [x]</span>
+            <div class="bg-white aspect-video rounded-lg overflow-hidden flex items-center justify-center border border-gray-100 shadow-2xl">
+                <video id="modal-video-player" controls class="w-full h-full hidden"><source src="" type="video/mp4"></video>
+                <img id="modal-image-player" src="" class="w-full h-full object-contain hidden">
+            </div>
+        </div>
+    </div>
+
+    <section class="hero-section">
+        <div class="hero-label label-tl font-instrument-serif">a true</div>
+        <div class="hero-label label-tr font-instrument-sans">*mind the glitches*</div>
+        <div class="hero-label label-bl font-instrument-serif">Where my creative<br>experimentation lives</div>
+       <div class="hero-link-container">
+            <a href="https://gemini.google.com/share/07b95a0cf805" target="_blank" class="hero-button font-instrument-sans">
+                View Gemini Chat
+            </a>
+        </div>
+        <div class="hero-label label-br font-instrument-sans">Made with Google Gemini, VS Code, & Github</div>
+
+        <h1 class="hero-title font-instrument-sans">PLAYGROUND</h1>
+        <div class="floating-head-container">
+            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Hero/Mascot-01.png" alt="Vashtie Mascot" class="main-head">
+            <div class="shard shard-1"><img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Hero/Star-01.png" alt="Star 1"></div>
+            <div class="shard shard-2"><img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Hero/Star-02.png" alt="Star 2"></div>
+            <div class="shard shard-3"><img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Hero/Star-02.png" alt="Star 3"></div>
+            <div class="shard shard-4"><img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Hero/Star-01.png" alt="Star 4"></div>
+        </div>
+    </section>
+
+    <section class="playground-section">
+        <div class="subheading-container">
+    <h2 class="font-instrument-serif">A Curation of My Creations</h2>
+</div>
+        <div id="playground-container">
+            <div class="project-card" onclick="toggleActive(this, event)">
+                <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Thumbnails/Proj-01.jpeg" class="card-image">
+                <div class="project-label font-instrument-serif">01</div>
+                <div class="mini-content-window">
+                    <div class="close-project font-instrument-sans" onclick="closeAllCards(event)">Close [x]</div>
+                    
+                    <div class="ticker-container mt-8 mb-12">
+                        <div class="ticker-wrapper">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Catcall/img 01.jpg" alt="1">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Catcall/img 03.jpg" alt="2">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Catcall/img 02.jpg" alt="3">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Catcall/img 05.png" alt="4">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Catcall/img 06.png" alt="5">
+                
+                            
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Catcall/img 01.jpg" alt="1">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Catcall/img 03.jpg" alt="2">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Catcall/img 02.jpg" alt="3">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Catcall/img 05.png" alt="4">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Catcall/img 06.png" alt="5">
+                        </div>
+                    </div>
+
+                    <div class="max-w-xl pr-10">
+                        <h2 class="text-3xl font-instrument-serif mb-4">Catcall Awareness Activation</h2>
+                        <p class="font-instrument-sans text-lg leading-relaxed text-gray-700 opacity-80">
+                            A street harassment campaign activation, specially highlighting catcalling by simulating the uncomfortable and often dangerous scenarios involved as they escalate without address.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card" onclick="toggleActive(this, event)">
+                <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Thumbnails/Proj-02.png" class="card-image">
+                <div class="project-label font-instrument-serif">02</div>
+                <div class="mini-content-window">
+                    <div class="close-project font-instrument-sans" onclick="closeAllCards(event)">Close [x]</div>
+                    
+                    <div class="ticker-container mt-8 mb-12">
+                        <div class="ticker-wrapper">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Memory Book/img-01.png" alt="1"><img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Memory Book/img-02.png" alt="2">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Memory Book/img-05.png" alt="3"><img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Memory Book/img-06.png" alt="4">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Memory Book/img-01.png" alt="1"><img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Memory Book/img-02.png" alt="2">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Memory Book/img-05.png" alt="3"><img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Memory Book/img-06.png" alt="4">
+                        </div>
+                    </div>
+
+                    <div class="max-w-xl pr-10">
+                        <h2 class="text-3xl font-instrument-serif mb-4">Cheers to 21 | Memory Book</h2>
+                        <p class="font-instrument-sans text-lg leading-relaxed text-gray-700 opacity-80">
+                            To celebrate our 21 years of friendship, I illustrated and created a little memory book of our journey since preschool till today, and celebrating moments we will soon share.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" onclick="toggleActive(this, event)">
+                <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Thumbnails/Proj-03.png" class="card-image">
+                <div class="project-label font-instrument-serif">03</div>
+                <div class="mini-content-window">
+                    <div class="close-project font-instrument-sans" onclick="closeAllCards(event)">Close [x]</div>
+                    
+                    <div class="ticker-container mt-8 mb-12">
+                        <div class="ticker-wrapper">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Gifting Postcards/img-02.png" alt="1">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Gifting Postcards/img-01.png" alt="2">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Gifting Postcards/img-03.jpg" alt="3">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Gifting Postcards/img-04.png" alt="4">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Gifting Postcards/img-05.jpg" alt="5">
+                            
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Gifting Postcards/img-02.png" alt="1">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Gifting Postcards/img-01.png" alt="2">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Gifting Postcards/img-03.jpg" alt="3">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Gifting Postcards/img-04.png" alt="4">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Gifting Postcards/img-05.jpg" alt="5">
+                        </div>
+                    </div>
+
+                    <div class="max-w-xl pr-10">
+                        <h2 class="text-3xl font-instrument-serif mb-4">Custom Postcards</h2>
+                        <p class="font-instrument-sans text-lg leading-relaxed text-gray-700 opacity-80">
+                            I have this interest in designing postcards as going away presents, because it has art on one side that you can freely hang as decoration, while on the back you can leave a heartfelt message. A great gift of appreciation that is a signature creation I do.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" onclick="toggleActive(this, event)">
+                <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Thumbnails/Proj-04.jpg" class="card-image">
+                <div class="project-label font-instrument-serif">04</div>
+                <div class="mini-content-window">
+                    <div class="close-project font-instrument-sans" onclick="closeAllCards(event)">Close [x]</div>
+                    
+                    <div class="ticker-container mt-8 mb-12">
+                        <div class="ticker-wrapper">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Concert Merch/img-01.JPG" alt="1">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Concert Merch/img-02.JPG" alt="2">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Concert Merch/img-03.jpg" alt="3">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Concert Merch/img-04.png" alt="4">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Concert Merch/img-05.png" alt="5">
+                            
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Concert Merch/img-01.JPG" alt="1">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Concert Merch/img-02.JPG" alt="2">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Concert Merch/img-03.jpg" alt="3">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Concert Merch/img-04.png" alt="4">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Concert Merch/img-05.png" alt="5">
+            
+                        </div>
+                    </div>
+
+                    <div class="max-w-xl pr-10">
+                        <h2 class="text-3xl font-instrument-serif mb-4">Concert Merch</h2>
+                        <p class="font-instrument-sans text-lg leading-relaxed text-gray-700 opacity-80">
+                            I have grown into the habit of making custom merch for me and my friend to truly show off our love for the artists we see at concerts and put some effort into showing our support.                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card" onclick="toggleActive(this, event)">
+                <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Thumbnails/Proj-05.png" class="card-image">
+                <div class="project-label font-instrument-serif">05</div>
+                <div class="mini-content-window">
+                    <div class="close-project font-instrument-sans" onclick="closeAllCards(event)">Close [x]</div>
+                    
+                    <div class="ticker-container mt-8 mb-12">
+                        <div class="ticker-wrapper">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Playground Area/img-01.png" alt="1">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Playground Area/img-02.png" alt="2">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Playground Area/img-03.png" alt="3">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Playground Area/img-04.png" alt="4">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Playground Area/img-05.png" alt="5">
+                            
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Playground Area/img-01.png" alt="1">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Playground Area/img-02.png" alt="2">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Playground Area/img-03.png" alt="3">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Playground Area/img-04.png" alt="4">
+                            <img src="https://raw.githubusercontent.com/byvpdesigns/Playground/main/assets/Playground Area/img-05.png" alt="5">
+            
+                        </div>
+                    </div>
+
+                    <div class="max-w-xl pr-10">
+                        <h2 class="text-3xl font-instrument-serif mb-4">Portfolio Playground</h2>
+                        <p class="font-instrument-sans text-lg leading-relaxed text-gray-700 opacity-80">
+                            Using Google Gemini, I embraced my play area's purpose as a true experimentation ground and built this small always work-in-progress site to showcase my other projects that have fuelled my sense of creativity, problem solving, and just creating fun work.
+                        </p>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <script>
+        function toggleActive(element, event) {
+            if (event.target.closest('.mini-content-window')) return;
+            const cards = document.querySelectorAll('.project-card');
+            const section = document.querySelector('.playground-section'); // The scrolling parent
+            
+            
+            if (element.classList.contains('active')) {
+                element.classList.remove('active');
+            } else {
+                cards.forEach(card => card.classList.remove('active'));
+                element.classList.add('active');
+                
+                // Centering Logic
+                setTimeout(() => {
+                    const cardOffset = element.offsetLeft;
+                    const sectionWidth = section.offsetWidth;
+                    const cardWidth = element.offsetWidth;
+
+                    const scrollToPoint = cardOffset - (sectionWidth / 2) + (cardWidth / 2);
+                    
+                   
+                    section.scrollTo({ left: middle, behavior: 'smooth' });
+                }, 400);
+            }
+        }
+
+        function closeAllCards(event) {
+            event.stopPropagation();
+            document.querySelectorAll('.project-card').forEach(card => card.classList.remove('active'));
+        }
+
+        function closeVideo() {
+            const modal = document.getElementById('video-modal');
+            const video = document.getElementById('modal-video-player');
+            modal.style.display = 'none';
+            video.pause(); video.src = "";
+        }
+    </script>
+</body>
+</html>
